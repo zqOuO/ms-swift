@@ -364,8 +364,12 @@ def get_model_tokenizer_from_local(model_dir: str,
             else:
                 context = partial(patch_automodel, **context_kwargs)
             with context():
-                model = automodel_class.from_pretrained(
-                    model_dir, config=model_config, trust_remote_code=True, **model_kwargs)
+                print(model_config)
+                if hasattr(model_config, 'initialization'):
+                    model = automodel_class.from_config(model_config)
+                else:
+                    model = automodel_class.from_pretrained(
+                        model_dir, config=model_config, trust_remote_code=True, **model_kwargs)
 
         # fix not save modeling_xxx.py (transformers 4.45)
         # https://github.com/huggingface/transformers/issues/24737
@@ -762,7 +766,7 @@ def get_model_tokenizer(
         quantization_config=quantization_config,
         task_type=task_type,
         num_labels=num_labels)
-
+    
     if device_map is None:
         device_map = get_default_device_map()
     model_kwargs['device_map'] = device_map

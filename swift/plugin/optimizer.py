@@ -65,10 +65,7 @@ def create_lorap_optimizer(args: 'TrainingArguments', model, dataset):
 
 def create_muon_optimizer(args: 'TrainingArguments', model, dataset):
     from swift.llm import git_clone_github
-    if not args.local_repo_path:
-        args.local_repo_path = git_clone_github('https://github.com/MoonshotAI/Moonlight.git')
-    sys.path.append(os.path.join(args.local_repo_path, 'examples'))
-    from toy_train import Muon
+    from .optimizers import Muon
 
     # parse args.optim_args
     optim_args = {}
@@ -299,6 +296,25 @@ def create_multimodal_optimizer(args: 'TrainingArguments', model, dataset):
     optimizer_cls, optimizer_kwargs = Trainer.get_optimizer_cls_and_kwargs(args, model)
     return optimizer_cls(optimizer_grouped_parameters, **optimizer_kwargs), None
 
+
+def create_adam_mini_optimizer(args: 'TrainingArguments', model, dataset):
+    from optimizers import AdamW_mini
+
+    # parse args.optim_args
+    optim_args = {}
+    if args.optim_args:
+        for mapping in args.optim_args.replace(' ', '').split(','):
+            key, value = mapping.split('=')
+            optim_args[key] = value
+
+    return AdamW_mini(
+        model.named_parameters(),
+        lr=args.learning_rate,
+        weight_decay=args.weight_decay,
+        betas=(args.adam_beta1, args.adam_beta2),
+        eps=args.adam_epsilon,
+        **optim_args,
+    ), None
 
 # Add your own optimizers here, use --optimizer xxx to train
 optimizers_map = {

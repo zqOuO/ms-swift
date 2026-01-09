@@ -76,7 +76,7 @@ class ModelArguments:
     # 'flash_attn', 'sdpa', 'eager', 'flex_attention', 'flash_attention_2', 'flash_attention_3'
     attn_impl: Optional[str] = None
     new_special_tokens: List[str] = field(default_factory=list)
-
+    initialization : bool = False
     num_labels: Optional[int] = None
     problem_type: Literal['regression', 'single_label_classification', 'multi_label_classification'] = None
     rope_scaling: Optional[str] = None
@@ -239,4 +239,5 @@ class ModelArguments:
             'num_labels': self.num_labels,
             'problem_type': self.problem_type,
             'init_strategy': self.init_strategy,
+            'initialization': self.initialization
         }

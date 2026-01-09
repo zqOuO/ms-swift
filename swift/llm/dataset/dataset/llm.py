@@ -492,6 +492,8 @@ register_dataset(
 register_dataset(
     DatasetMeta(ms_dataset_id='modelscope/MathR-32B-Distill', subsets=['data'], split=['train'], tags=['qa', 'math']))
 
+register_dataset(
+    DatasetMeta(ms_dataset_id='./datasets/DAPO-Math-17k-Processed', subsets=['AIME2025-I', 'AIME2025-II'], split=['test'], tags=['qa', 'math']))
 
 class CoundownTaskPreprocessor(ResponsePreprocessor):
 

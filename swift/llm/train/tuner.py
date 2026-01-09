@@ -271,7 +271,7 @@ def prepare_adapter(args: TrainArguments, model, *, template=None, train_dataset
     elif args.train_type == 'adalora':
         lora_kwargs.pop('lorap_lr_ratio', None)
         lora_kwargs['rank_pattern'] = None
-        from swift.plugin.optimizer import calculate_max_steps
+        from swift.plugin.optimizers import calculate_max_steps
         adalora_config = AdaLoraConfig(
             task_type=task_type,
             **lora_kwargs,
